@@ -13,7 +13,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "todo",
-	Short: "A brief description of your application",
+	Short: "A CLI application for creating, viewing and managing to-do lists",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
