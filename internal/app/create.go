@@ -20,7 +20,11 @@ func init() {
 }
 
 func createList(cmd *cobra.Command, args []string) {
-	var name string = args[0]
-	list := todo.TodoList{name, nil}
-	err = todo.NewService(s).Create(list)
+	name := args[0]
+	items := make([]todo.Item, 0)
+	list := todo.TodoList{Name: name, Items: items}
+	err := rootSvc.Create(list)
+	if err != nil {
+		panic(err)
+	}
 }

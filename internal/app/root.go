@@ -7,6 +7,7 @@ package app
 import (
 	"os"
 
+	"github.com/soulgeo/todolist/internal/todo"
 	"github.com/spf13/cobra"
 )
 
@@ -23,6 +24,12 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+}
+
+var rootSvc *todo.Service
+
+func SetService(s *todo.Service) {
+	rootSvc = s
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
