@@ -2,7 +2,8 @@ package todo
 
 type Store interface {
 	Create(list TodoList) error
-	Delete(name string) error
-	Add(list TodoList, item Item) error
-	Remove(list TodoList, index int) error
+	Delete(listname string) error
+	Add(listname string, item Item) error
+	Remove(listname string, index int) error
+	Get(listname string) (*TodoList, error)
 }

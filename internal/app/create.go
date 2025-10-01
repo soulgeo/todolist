@@ -1,7 +1,6 @@
 package app
 
 import (
-	"github.com/soulgeo/todolist/internal/todo"
 	"github.com/spf13/cobra"
 )
 
@@ -20,10 +19,8 @@ func init() {
 }
 
 func createList(cmd *cobra.Command, args []string) {
-	name := args[0]
-	items := make([]todo.Item, 0)
-	list := todo.TodoList{Name: name, Items: items}
-	err := rootSvc.Create(list)
+	listname := args[0]
+	err := rootSvc.Create(listname)
 	if err != nil {
 		panic(err)
 	}
