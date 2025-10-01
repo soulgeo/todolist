@@ -1,6 +1,10 @@
 package todo
 
-import "time"
+import (
+	"time"
+
+	"github.com/soulgeo/todolist/internal/config"
+)
 
 type Service struct {
 	store Store
@@ -37,6 +41,22 @@ func (svc *Service) Add(
 	return svc.store.Add(listname, item)
 }
 
-func (svc *Service) Remove(list TodoList, index int) error {
-	return svc.store.Remove(list, index)
+func (svc *Service) Remove(listname string, index int) error {
+	return svc.store.Remove(listname, index)
+}
+
+func (svc *Service) GetList(listname string) (*TodoList, error) {
+	return svc.store.GetList(listname)
+}
+
+func (svc *Service) GetSelectedList() (*TodoList, error) {
+	list, err := config.GetSelected()
+	if err != nil {
+		return nil, err
+	}
+	return svc.store.GetList(list)
+}
+
+func (svc *Service) Select(listname string) error {
+	return config.SetSelected(listname)
 }

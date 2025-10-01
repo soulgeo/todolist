@@ -5,5 +5,5 @@ type Store interface {
 	Delete(listname string) error
 	Add(listname string, item Item) error
 	Remove(listname string, index int) error
-	Get(listname string) (*TodoList, error)
+	GetList(listname string) (*TodoList, error)
 }

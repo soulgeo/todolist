@@ -4,9 +4,8 @@ Package store
 package store
 
 import (
-	"encoding/json"
 	"errors"
-	"os"
+	"time"
 
 	"github.com/soulgeo/todolist/internal/todo"
 )
@@ -61,6 +60,7 @@ func (jsonstore *JSONStore) Add(listname string, item todo.Item) error {
 		return errors.New("list with given name not found")
 	}
 	list.Items = append(list.Items, item)
+	list.LastEdited = time.Now()
 	err = WriteJSON(fileName, *lists)
 	if err != nil {
 		return err
@@ -73,11 +73,12 @@ func (jsonstore *JSONStore) Remove(listname string, index int) error {
 	if err != nil {
 		return err
 	}
-	index, list := todo.FindList(listname, *lists)
-	if index == -1 {
+	ind, list := todo.FindList(listname, *lists)
+	if ind == -1 {
 		return errors.New("list with given name not found")
 	}
 	list.Items = append(list.Items[:index], list.Items[index+1:]...)
+	list.LastEdited = time.Now()
 	err = WriteJSON(fileName, *lists)
 	if err != nil {
 		return err
@@ -85,7 +86,7 @@ func (jsonstore *JSONStore) Remove(listname string, index int) error {
 	return nil
 }
 
-func (jsonstore *JSONStore) Get(listname string) (*todo.TodoList, error) {
+func (jsonstore *JSONStore) GetList(listname string) (*todo.TodoList, error) {
 	lists, err := ParseJSON(fileName)
 	if err != nil {
 		return nil, err
@@ -96,29 +97,4 @@ func (jsonstore *JSONStore) Get(listname string) (*todo.TodoList, error) {
 		}
 	}
 	return nil, errors.New("list with given name not found")
-}
-
-func ParseJSON(filename string) (*todo.ListOfLists, error) {
-	content, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	lists := todo.ListOfLists{}
-	err = json.Unmarshal(content, &lists)
-	if err != nil {
-		return nil, err
-	}
-	return &lists, nil
-}
-
-func WriteJSON(filename string, lists todo.ListOfLists) error {
-	in, err := json.Marshal(lists)
-	if err != nil {
-		return err
-	}
-	err = os.WriteFile(filename, in, 0o666)
-	if err != nil {
-		return err
-	}
-	return nil
 }
