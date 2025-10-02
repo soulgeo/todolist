@@ -8,12 +8,15 @@ import (
 )
 
 func ParseJSON(filename string) (*todo.ListOfLists, error) {
-	content, err := os.ReadFile(filename)
+	out, err := os.ReadFile(filename)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return &todo.ListOfLists{}, nil
+		}
 		return nil, err
 	}
 	lists := todo.ListOfLists{}
-	err = json.Unmarshal(content, &lists)
+	err = json.Unmarshal(out, &lists)
 	if err != nil {
 		return nil, err
 	}

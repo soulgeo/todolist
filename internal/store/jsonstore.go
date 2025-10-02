@@ -10,8 +10,6 @@ import (
 	"github.com/soulgeo/todolist/internal/todo"
 )
 
-const fileName string = "lists.json"
-
 type JSONStore struct {
 	File string
 }
@@ -21,12 +19,12 @@ func NewJSONStore(file string) todo.Store {
 }
 
 func (jsonstore *JSONStore) Create(list todo.TodoList) error {
-	lists, err := ParseJSON(fileName)
+	lists, err := ParseJSON(jsonstore.File)
 	if err != nil {
 		return err
 	}
 	lists.Lists = append(lists.Lists, list)
-	err = WriteJSON(fileName, *lists)
+	err = WriteJSON(jsonstore.File, *lists)
 	if err != nil {
 		return err
 	}
@@ -34,7 +32,7 @@ func (jsonstore *JSONStore) Create(list todo.TodoList) error {
 }
 
 func (jsonstore *JSONStore) Delete(listname string) error {
-	lists, err := ParseJSON(fileName)
+	lists, err := ParseJSON(jsonstore.File)
 	if err != nil {
 		return err
 	}
@@ -43,7 +41,7 @@ func (jsonstore *JSONStore) Delete(listname string) error {
 		return errors.New("list with given name not found")
 	}
 	lists.Lists = append(lists.Lists[:index], lists.Lists[index+1:]...)
-	err = WriteJSON(fileName, *lists)
+	err = WriteJSON(jsonstore.File, *lists)
 	if err != nil {
 		return err
 	}
@@ -51,7 +49,7 @@ func (jsonstore *JSONStore) Delete(listname string) error {
 }
 
 func (jsonstore *JSONStore) Add(listname string, item todo.Item) error {
-	lists, err := ParseJSON(fileName)
+	lists, err := ParseJSON(jsonstore.File)
 	if err != nil {
 		return err
 	}
@@ -61,7 +59,7 @@ func (jsonstore *JSONStore) Add(listname string, item todo.Item) error {
 	}
 	list.Items = append(list.Items, item)
 	list.LastEdited = time.Now()
-	err = WriteJSON(fileName, *lists)
+	err = WriteJSON(jsonstore.File, *lists)
 	if err != nil {
 		return err
 	}
@@ -69,7 +67,7 @@ func (jsonstore *JSONStore) Add(listname string, item todo.Item) error {
 }
 
 func (jsonstore *JSONStore) Remove(listname string, index int) error {
-	lists, err := ParseJSON(fileName)
+	lists, err := ParseJSON(jsonstore.File)
 	if err != nil {
 		return err
 	}
@@ -79,7 +77,7 @@ func (jsonstore *JSONStore) Remove(listname string, index int) error {
 	}
 	list.Items = append(list.Items[:index], list.Items[index+1:]...)
 	list.LastEdited = time.Now()
-	err = WriteJSON(fileName, *lists)
+	err = WriteJSON(jsonstore.File, *lists)
 	if err != nil {
 		return err
 	}
@@ -87,7 +85,7 @@ func (jsonstore *JSONStore) Remove(listname string, index int) error {
 }
 
 func (jsonstore *JSONStore) GetList(listname string) (*todo.TodoList, error) {
-	lists, err := ParseJSON(fileName)
+	lists, err := ParseJSON(jsonstore.File)
 	if err != nil {
 		return nil, err
 	}
@@ -97,4 +95,16 @@ func (jsonstore *JSONStore) GetList(listname string) (*todo.TodoList, error) {
 		}
 	}
 	return nil, errors.New("list with given name not found")
+}
+
+func (jsonstore *JSONStore) GetAllLists() ([]string, error) {
+	lists, err := ParseJSON(jsonstore.File)
+	if err != nil {
+		return nil, err
+	}
+	var listnames []string
+	for _, l := range lists.Lists {
+		listnames = append(listnames, l.Name)
+	}
+	return listnames, nil
 }
