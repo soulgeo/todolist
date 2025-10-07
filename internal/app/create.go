@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -24,4 +26,5 @@ func createList(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("Created list: %s.\n", listname)
 }

@@ -41,29 +41,32 @@ func (svc *Service) Add(
 	return svc.store.Add(listname, item)
 }
 
-func (svc *Service) AddToSelected(itemname string, priority string) error {
+func (svc *Service) AddToSelected(
+	itemname string,
+	priority string,
+) (string, error) {
 	listname, err := config.GetSelected()
 	if err != nil {
-		return err
+		return listname, err
 	}
 	item := Item{
 		Title:     itemname,
 		Priority:  priority,
 		Completed: false,
 	}
-	return svc.store.Add(listname, item)
+	return listname, svc.store.Add(listname, item)
 }
 
 func (svc *Service) Remove(listname string, index int) error {
 	return svc.store.Remove(listname, index)
 }
 
-func (svc *Service) RemoveFromSelected(index int) error {
+func (svc *Service) RemoveFromSelected(index int) (string, error) {
 	listname, err := config.GetSelected()
 	if err != nil {
-		return err
+		return listname, err
 	}
-	return svc.store.Remove(listname, index)
+	return listname, svc.store.Remove(listname, index)
 }
 
 func (svc *Service) GetList(listname string) (*TodoList, error) {

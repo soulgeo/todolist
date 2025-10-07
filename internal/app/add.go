@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -21,8 +23,9 @@ func init() {
 func addItem(cmd *cobra.Command, args []string) {
 	itemname := args[0]
 	priority := args[1]
-	err := rootSvc.AddToSelected(itemname, priority)
+	listname, err := rootSvc.AddToSelected(itemname, priority)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("\"%s\" added to %s.\n", itemname, listname)
 }

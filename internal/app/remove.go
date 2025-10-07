@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -25,8 +26,9 @@ func removeItem(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
-	err = rootSvc.RemoveFromSelected(index - 1)
+	listname, err := rootSvc.RemoveFromSelected(index - 1)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("Removed item at index %d from %s.\n", index, listname)
 }

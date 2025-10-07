@@ -1,6 +1,9 @@
 package app
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/spf13/cobra"
 )
 
@@ -20,8 +23,22 @@ func init() {
 
 func deleteList(cmd *cobra.Command, args []string) {
 	listname := args[0]
+
+	var confirm string
+	fmt.Printf(
+		"Are you sure you want to delete this list: %s? [Y/n]: ",
+		listname,
+	)
+	fmt.Scanln(&confirm)
+	confirm = strings.ToLower(strings.TrimSpace(confirm))
+
+	if confirm != "y" {
+		return
+	}
+
 	err := rootSvc.Delete(listname)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("List %s deleted.\n", listname)
 }

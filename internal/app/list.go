@@ -22,6 +22,8 @@ func showList(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Printf("%s:\n", list.Name)
 	for i, item := range list.Items {
 		fmt.Printf("%d: %s (Priority: %s)\n", i+1, item.Title, item.Priority)
 	}

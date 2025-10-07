@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -24,4 +26,5 @@ func selectList(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("%s is now the selected list.\n", listname)
 }
